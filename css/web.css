@@ -1,0 +1,7 @@
+[data-role=page]{height: 100% !important; position:relative !important;}
+[data-role=footer]{bottom:0; position:absolute !important; top: auto !important; width:100%;}
+#one { background-color: #CED8E0; !important;}
+#content h3 { color: black; !important }
+#header { background-color: #E6ECEF; }
+.ui-grid-b { background-color: #9DB1C0; }
+#survey { background-color: #B6C4D0; }
