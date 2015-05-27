@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"/> 
+    <head>
+        <title>Wizard</title>
+       	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+	<style type="text/css">
+		#surveybuild { background-color: silver; }
+	</style>
+    	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+   	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function() {
+	$("#one").on("click", ".finish", function(e) {
+		// count number of build containers
+		var buildCount = $('#surveybuild .build_container').length;
+		// loop through each buildq, buildt and combine and send
+		//! check that theres at least one record
+		//data.object1 = object1;
+		var data = {};
+		for(i = 1; i <= buildCount; i++){
+			 var record = {};
+			 var buildQuestion = "#buildq"+i;
+			 var buildType = "#buildt"+i;
+			 data[i] = { "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"" };
+			 //data.record[i] = record[i];
+			 //console.log($(buildQuestion)[0].innerHTML);
+			 //console.log($(buildType)[0].innerHTML);
+			 //{ "title": "First Question", "type" : "radio" }
+			 //data.object+i = object+i;
+		}
+			//console.log(data);
+			 test(data);
+
+	});
+	$("#select-qnumbers").bind( "change", function(e) {
+		//test(e.target.value);
+		build(e.target.value);
+	});
+	$('#questionaire').on('keyup', '.qtext', function(e) {
+		var formButton = this.id;
+		var lastChar = formButton.substr(formButton.length - 1);
+		var formButton = this.id;
+		var enteredText = $(this).val();
+		var buildQuestion = "#buildq"+lastChar;
+		$(buildQuestion).html(enteredText);
+	});
+	$('#questionaire').on('change', ".select-qmenu", function(e) {
+		var formButton = this.id;
+		var lastChar = formButton.substr(formButton.length - 1);
+		var buildQuestion = "#buildt"+lastChar;
+		$(buildQuestion).append(" Form Type: "+e.target.value);
+		if(e.target.value == "Select"){
+			var items = prompt("Add select menu items");
+			if(items != null){
+				//alert("Added: "+items);
+				$(buildQuestion).append(" Select Menu: "+items);
+			}
+		}
+		//$(buildQuestion).append(" Form Type: "+e.target.value);
+	});
+	// add individual survey items by clicking add
+	/*
+	$("#questionaire").on("click", ".submit", function(e) {
+		var formButton = this.id;
+		var lastChar = formButton.substr(formButton.length - 1);
+		var formQuestion = "#qtext"+lastChar;
+		var buildQuestion = "#build"+lastChar;
+		newQuestion = $(formQuestion).val();
+		//$(buildQuestion).append(newQuestion);
+		$("#surveybuild").append(newQuestion);
+	});
+	*/
+	function test(data){
+		//console.log(data);
+		/*
+		var data = {};
+		var object1 = { "title": "First Question", "type" : "radio" };
+		var object2 = { "title": "Second Question", "type" : "radio" };
+		data.object1 = object1;
+		data.object2 = object2;
+		*/
+		//nq = JSON.stringify({ "title": "First Question", "type" : "radio" });
+		$.ajax({
+			type: "GET",
+			url: "http://data.sccwrp.org/survey/build.php",
+			//data: {"title": "my test"},
+			data: data,
+			dataType: "jsonp",
+			error: function(x,t,m){
+				console.log(x);
+			},
+			success: function(data){
+				console.log(data);
+			}
+	  	});
+	}
+
+	});
+	function build(nq){
+		for(i = 0; i < nq; i++){
+			var rq = (i + 1);
+			var newContent = 'Question'+rq+': \
+					 <input id="qtext'+rq+'" type="text" class="qtext"></input> \
+					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
+					 	<option>Text</option> \
+					 	<option>Number</option> \
+					 	<option>Select</option> \
+					</select>';
+			$("#questionaire").append(newContent);
+			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Question'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div></div>');
+					 //<input id="submit'+rq+'" type="submit" value="Add" class="submit">';
+		}
+	}
+	</script>
+  </head>
+  <body>
+	<div id="one" data-role="page">
+	<h3>Mobile Survey Wizard</h3>
+	<div data-role="fieldcontain">
+		<label for="select-qnumbers" class="select">How many questions does your survey contain?</label>
+		<select name="select-qnumbers" id="select-qnumbers">
+			<option>Select One</option>
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+		</select>
+	</div>
+	<div id="questionaire"></div>
+	<div id="surveybuild"></div>
+	<button id="finish" class="finish">Finished</button>
+	</div>
+  </body>
+</html>
