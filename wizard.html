@@ -21,7 +21,7 @@
 			 var record = {};
 			 var buildQuestion = "#buildq"+i;
 			 var buildType = "#buildt"+i;
-			 data[i] = { "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"" };
+			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -30,6 +30,7 @@
 		}
 			//console.log(data);
 			 test(data);
+			 //Object {errors: "success -> writing to zip file ", result: "Table tbl_1435761014 created successfully", url: "http://data.sccwrp.org/survey/export/survey_1435761014/survey_1435761014.zip"}
 
 	});
 	$("#select-qnumbers").bind( "change", function(e) {
@@ -48,7 +49,8 @@
 		var formButton = this.id;
 		var lastChar = formButton.substr(formButton.length - 1);
 		var buildQuestion = "#buildt"+lastChar;
-		$(buildQuestion).append(" Form Type: "+e.target.value);
+		//$(buildQuestion).append(" Form Type: "+e.target.value);
+		$(buildQuestion).append(e.target.value);
 		if(e.target.value == "Select"){
 			var items = prompt("Add select menu items");
 			if(items != null){
@@ -91,6 +93,7 @@
 			},
 			success: function(data){
 				console.log(data);
+				$.mobile.changePage("#two");
 			}
 	  	});
 	}
@@ -100,14 +103,19 @@
 		for(i = 0; i < nq; i++){
 			var rq = (i + 1);
 			var newContent = 'Question'+rq+': \
-					 <input id="qtext'+rq+'" type="text" class="qtext"></input> \
+					 <input id="qid'+rq+'" type="text" class="qtext"></input> \
 					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
-					 	<option>Text</option> \
-					 	<option>Number</option> \
-					 	<option>Select</option> \
-					</select>';
+					 	<option>Select One</option> \
+					 	<option>text</option> \
+					 	<option>number</option> \
+					 	<option>radio</option> \
+					 	<option>select</option> \
+					 	<option>multi</option> \
+					 </select> \
+					 <label><input type="checkbox" name="checkbox-0">Create Database</input></label> \
+					';
 			$("#questionaire").append(newContent);
-			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Question'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div></div>');
+			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div></div>');
 					 //<input id="submit'+rq+'" type="submit" value="Add" class="submit">';
 		}
 	}
@@ -124,11 +132,24 @@
 			<option value="2">2</option>
 			<option value="3">3</option>
 			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
 		</select>
 	</div>
 	<div id="questionaire"></div>
 	<div id="surveybuild"></div>
 	<button id="finish" class="finish">Finished</button>
+	</div>
+	<div id="two" data-role="page">
+	<h3>Mobile Survey Client</h3>
+	<div data-role="fieldcontain">
+		<a href="#">Client Phonegap Package [zip]</a>
+		<a href="#">Client CSV Export [csv]</a>
+		<div id="surveyresult"></div>
 	</div>
   </body>
 </html>

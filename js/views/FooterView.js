@@ -14,11 +14,14 @@ app.FooterView = Backbone.View.extend({
 		"click #survey": "goToSurvey",
 		"click #sync": "goToSync"
 		},
-	back: function () {
-		alert("back");
+   	back: function (e) { 
+	 	e.preventDefault();
+		this.trigger("back");
 	},
-	forward: function () {
-		alert("forward");
+    	forward: function (e) { 
+	  	e.preventDefault();
+		//this.toggle("off");
+		this.trigger("forward");
 	},
 	restart: function () {
 		alert("restart");

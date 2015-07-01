@@ -14,13 +14,25 @@ app.Router = Backbone.Router.extend({
 			/*console.log("questionList fetch - success");*/ 
 			app.questionList.getQuestion();
 			gotQuestion = app.questionList.get("1");
-		//gotQuestion = app.questionList.get("1");
-		//var gotQuestion = app.questionList.get(nextQcount);
-		app.questionListView = new app.QuestionListView({model: gotQuestion});
-		app.questionListView.render();
+			app.questionListView = new app.QuestionListView({model: gotQuestion});
+			app.questionListView.render();
+
+	        	app.answerList = new AnswerList();
+		var answerCreate = app.answerList.create({qcount: 1, timestamp: SESSIONID}, {
+                	success: function(response){
+				console.log(response);
+		        	var answer = app.answerList.get(response.id);
+				app.answerListView = new AnswerListView({model: answer });
+				app.answerListView.endquestion = MAXQUESTION;
+                	}, error: function(model, response){
+				console.log(response.responseText);
+				console.log(response.status);
+				console.log(response.statusText);
+			}
+		});
 		}});
-		app.currentView = new app.HomeView();
-		$("#content").html( app.currentView.render().el );
+		//app.currentView = new app.HomeView();
+		//$("#content").html( app.currentView.render().el );
 		app.currentFooter = new app.FooterView();
 		$("#footer").html( app.currentFooter.render().el );
 		app.helpers.css();

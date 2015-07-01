@@ -5,6 +5,7 @@
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" href="css/web.css" />
+	<link rel="stylesheet" href="css/jquery.mobile.simpledialog.min.css" />
     	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
     	<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
         <meta http-equiv="cache-control" content="max-age=0" />
@@ -15,12 +16,70 @@
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
   </head>
   <body>
-    <div data-role="page" id="one">
+    <div data-role="page" id="one" data-title="Mobile Client">
 	    <div data-role="header" id="header"><h3>Header</h3></div> 
-	    <div role="main" class="ui-content" id="content"><h3>My Content</h3></div>
+	    <div role="main" class="ui-content" id="content"></div>
 	<div data-role="footer" id="footer">
 	</div>
     <div> 
+    <script type="text/template" id="tpl-answer-details">
+	<% if((type) == "text"){ %>
+		<div class="ui-field-contain">
+	    		<input type="text" id="aid" name="aid" class="text-view" placeholder= <%= placeholder %> value="" required/>
+			<% if(decline == "yes") { %>
+				<button id="decline" class="decline">Decline and save</button>
+			<% }; %>
+	    	</div>
+	<% } else if ((type) == "multi"){  %>
+		<div id="multi-view" data-role="fieldcontain">
+			<div class="ui-field-contain ui-body ui-br" data-inset="true">
+				<fieldset data-role="controlgroup" id="aid">
+				<% for(i=0; i < menu.length; i++) { %>
+					<input type="checkbox" class="custom" value= "<%= menu[i] %>"  name = <%= "multi-checkbox-" + i.toString() %> id= <%= "multi-checkbox-" + i.toString() %> />
+					<label for=<%= "multi-checkbox-" + i.toString()  %> >  <%= menu[i] %> </label>
+				<% }; %>
+				</fieldset>
+			</div>
+		</div>
+	<% } else if ((type) == "numberSelect"){  %>
+		<div class="ui-field-contain" data-inset="true">
+	  		<input type="number" id="aid">
+			<select name="aidscale" id="aidscale">
+			<% var dates = menu; %>
+			<% for(i=0;i < menu.length;i++) { %>
+				<option value= "<%= menu[i] %>" > <%= menu[i] %> </option>
+			<% }; %>
+			</select>
+		</div>
+	<% } else if ((type) == "radio"){  %>
+		<div id="multi-radio" class="ui-field-contain" data-role='fieldcontain'>
+			<form id ="aid" >
+		    		<div style="margin: 0 auto; display: table; width: 19em; position:relative;">
+					<fieldset data-role="controlgroup" data-type="horizontal" data-role="fieldcontain" data-mini="true">
+					<% for(i=0; i < menu.length; i++) { %>
+						<label class="radioClassLabel" id= <%= "radioLabel-" + String.fromCharCode(97 + i)  %> >
+							<input type="radio" id="radio-ID" name="radioSelect" value= <%= menu[i] %> />
+							<span class="ui-btn-inner">
+								<span class="ui-btn-text" id= <%= "radio-text-" + String.fromCharCode(97 +i)  %> > <%= menu[i] %></span>
+							</span>
+						</label>
+					<% }; %>
+					</fieldset>
+				</div> 
+		    	</form>
+	   	 </div>
+	<% } else if ((type) == "select"){  %>
+		<div id="multi-select">
+			<fieldset class="ui-field-contain">
+		  		<select name="aid" id="aid" class="selectClass">
+			  	<% for(i=0; i < menu.length; i++) { %>
+					<option value= "<%= menu[i] %>" > <%= menu[i] %> </option>
+				<% }; %>
+		      		</select>
+			</fieldset>
+		</div>
+	<% } %>
+    </script>
     <script type="text/template" id="tpl-footer">
 		<div class="ui-grid-b">
 			<div id="back" class="ui-block-a"><a class="ui-shadow ui-btn ui-corner-all ui-icon-arrow-l ui-btn-icon-notext">Button</a></div>
@@ -44,16 +103,19 @@
     <script src="js/vendor/underscore-min.js"></script>
     <script src="js/vendor/backbone-min.js"></script>
     <script src="js/vendor/backbone.dualstorage.js"></script>
+    <script src="js/vendor/json2.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery.mobile.simpledialog2.min.js"></script>
     <script src="js/router.js"></script>
     <script src="js/globals.js"></script>
     <script src="js/helpers.js"></script>
     <script src="js/models/Answer.js"></script>
     <script src="js/models/Question.js"></script>
-    <script src="js/collections/AnswerList.js"></script>
     <script src="js/collections/QuestionList.js"></script>
+    <script src="js/collections/AnswerList.js"></script>
     <script src="js/views/FooterView.js"></script>
     <script src="js/views/HomeView.js"></script>
     <script src="js/views/QuestionListView.js"></script>
+    <script src="js/views/AnswerListView.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

@@ -19,8 +19,8 @@ var AnswerListView = Backbone.View.extend({
 		this.qHistory = [];
 		$(this.el).unbind("click");
 		this.listenTo(this.model, 'sync', this.nextQuestion);
-		this.listenTo(footerView, 'forward', this.saveAnswer); 
-		this.listenTo(footerView, 'back', this.goBack); 
+		this.listenTo(app.currentFooter, 'forward', this.saveAnswer); 
+		this.listenTo(app.currentFooter, 'back', this.goBack); 
 		this.listenTo(this.model, 'change:status', this.nextQuestion);
 		this.listenTo(this.model, 'change:type', function() {
 			if(["radio", "select"].indexOf(this.model.get('type')) >=  0) {
@@ -69,6 +69,7 @@ var AnswerListView = Backbone.View.extend({
 	},
 	qHistory: [],
 	goBack: function(event){
+		alert("goBack");
 		index = this.qHistory.pop();
 		if(index) {
 			this.model.set("qcount", index); 
@@ -99,7 +100,7 @@ var AnswerListView = Backbone.View.extend({
 		// changed - to above for receipt
 		//var nextQcount = response.qcount;
 		////console.log(response.qcount);
-     		var questionList = new QuestionList();
+     		var questionList = new app.QuestionList();
 		questionList.fetch({success: getQuestion,error: errorQuestion});
 		function getQuestion(){
 			gotQuestion = questionList.get(nextQcount);
@@ -110,13 +111,13 @@ var AnswerListView = Backbone.View.extend({
 				'placeholder': gotQuestion.attributes.placeholder,
 				'placetype': gotQuestion.attributes.placetype,
 				'decline': gotQuestion.attributes.decline});
-			questionListView = new QuestionListView({model: gotQuestion});
+			questionListView = new app.QuestionListView({model: gotQuestion});
 			questionListView.render();
 			//updateProgressBar();
 			//that.render();
 			$("#content").append(that.render().el);
 			updateProgressBar(t);
-			appRouter.css();
+			//appRouter.css();
 			//$(window).scroll(appRouter.positionFooter).resize(appRouter.positionFooter)
 		}
 		function updateProgressBar(t){
@@ -220,7 +221,7 @@ var AnswerListView = Backbone.View.extend({
 			var currentAnswer = "Did not Enter";	
 		};
 		if(currentAnswer == "Other") {
-			footerView.toggle("on");
+			//footerView.toggle("on");
 			return;
 		};
 	        //var currentAnswer = this.extractAnswer();
@@ -296,8 +297,9 @@ var AnswerListView = Backbone.View.extend({
 	},
 	render: function(){
 		$(this.el).html("");
-		$(headerView.el).show();
-		$(footerView.el).show();
+		//$(headerView.el).show();
+		//app.headerView.show();
+		//app.footerView.show();
 		$(this.el).html(this.template(this.model.toJSON()));
 		$('input:checkbox[value="Other"]').on('change', function(s) {
 			$('<div>').simpledialog2({
@@ -343,7 +345,7 @@ var AnswerListView = Backbone.View.extend({
 			  	})	
 			};
 		});
-		footerView.toggle("on");
+		//footerView.toggle("on");
 		/* !!!!!!!! important this must be in code otherwise events will be lost between rendering !!!!!! */
 		this.delegateEvents();
 		return this;

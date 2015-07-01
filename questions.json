@@ -30,9 +30,9 @@
   {
 	"title": "Question Three?",
 	"action": "none",
-      	"type": "multitext",
-      	"menu": "",
-        "other": "n",
+      	"type": "select",
+      	"menu": "select one,one,two,three,Other",
+        "other": "y",
 	"otype": "",
   	"answer": "",
 	"decline": "no",
@@ -44,9 +44,9 @@
   {
 	"title": "Question Four?",
 	"action": "none",
-      	"type": "multiselect",
-      	"menu": "",
-        "other": "n",
+      	"type": "multi",
+      	"menu": "car,plane,bus,Other",
+        "other": "y",
 	"otype": "",
   	"answer": "",
 	"decline": "",
@@ -58,8 +58,8 @@
   {
 	"title": "Question Five?",
 	"action": "none",
-      	"type": "text",
-      	"menu": "",
+      	"type": "numberSelect",
+      	"menu": "weight,height",
         "other": "n",
 	"otype": "",
   	"answer": "",
@@ -68,19 +68,5 @@
 	"errmessage": "",
       	"status": "incomplete",
       	"id": "5"
-  },
-  {
-	"title": "End Survey",
-	"action": "none",
-      	"type": "radio",
-      	"menu": "Yes,No",
-        "other": "n",
-	"otype": "",
-  	"answer": "",
-	"decline": "no",
-	"declinedefault": "",
-	"errmessage": "",
-      	"status": "incomplete",
-      	"id": "6"
   }
 ]
