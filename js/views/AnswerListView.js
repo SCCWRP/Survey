@@ -116,9 +116,8 @@ var AnswerListView = Backbone.View.extend({
 			//updateProgressBar();
 			//that.render();
 			$("#content").append(that.render().el);
-			updateProgressBar(t);
-			//appRouter.css();
-			//$(window).scroll(appRouter.positionFooter).resize(appRouter.positionFooter)
+			//updateProgressBar(t);
+			app.helpers.css();
 		}
 		function updateProgressBar(t){
 			var modOne = 13;
@@ -276,8 +275,8 @@ var AnswerListView = Backbone.View.extend({
 						} else {
 							// clear stage and events
 							that.cleanup();
-							app.dialog("Survey is Complete","Notification","Ok");
-							appRouter.navigate('/', {trigger: false});
+							app.helpers.dialog("Survey is Complete","Notification","Ok");
+							Backbone.history.navigate('survey/start', {trigger: false});
 							location.assign(HOME);
 						}
 					}
@@ -296,11 +295,13 @@ var AnswerListView = Backbone.View.extend({
 		this.remove();
 	},
 	render: function(){
+		console.log("render");
 		$(this.el).html("");
 		//$(headerView.el).show();
 		//app.headerView.show();
 		//app.footerView.show();
 		$(this.el).html(this.template(this.model.toJSON()));
+		app.helpers.css();
 		$('input:checkbox[value="Other"]').on('change', function(s) {
 			$('<div>').simpledialog2({
 				mode: 'button',

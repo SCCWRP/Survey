@@ -12,6 +12,7 @@ app.HomeView = Backbone.View.extend({
 		"click #sync": "goToSync"
 		},
 	goToEdit: function () {
+		//app.helpers.dialog();
 		app.Routes.navigate("survey/edit", {trigger: true});
 	},
 	goToSurvey: function () {

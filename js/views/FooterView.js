@@ -27,7 +27,8 @@ app.FooterView = Backbone.View.extend({
 		alert("restart");
 	},
 	goToEdit: function () {
-		alert("goToEdit");
+		//alert("goToEdit");
+		app.helpers.dialog("Survey is Complete","Notification","Ok");
 		//app.Routes.navigate("survey/edit", {trigger: true});
 	},
 	goToSurvey: function () {

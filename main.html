@@ -25,7 +25,7 @@
     <script type="text/template" id="tpl-answer-details">
 	<% if((type) == "text"){ %>
 		<div class="ui-field-contain">
-	    		<input type="text" id="aid" name="aid" class="text-view" placeholder= <%= placeholder %> value="" required/>
+			<input type="text" id="aid" name="aid" class="text-view" placeholder="<%= placeholder %>" value="" required />
 			<% if(decline == "yes") { %>
 				<button id="decline" class="decline">Decline and save</button>
 			<% }; %>

@@ -21,7 +21,8 @@
 			 var record = {};
 			 var buildQuestion = "#buildq"+i;
 			 var buildType = "#buildt"+i;
-			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"" };
+			 var buildMenu = "#buildm"+i;
+			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -48,14 +49,26 @@
 	$('#questionaire').on('change', ".select-qmenu", function(e) {
 		var formButton = this.id;
 		var lastChar = formButton.substr(formButton.length - 1);
-		var buildQuestion = "#buildt"+lastChar;
+		var buildType = "#buildt"+lastChar;
+		var buildMenu = "#buildm"+lastChar;
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
-		$(buildQuestion).append(e.target.value);
-		if(e.target.value == "Select"){
+		$(buildType).append(e.target.value);
+		if(e.target.value == "radio"){
+			var items = prompt("Add radio menu items");
+			if(items != null){
+				$(buildMenu).append(items);
+			}
+		}
+		if(e.target.value == "multi"){
+			var items = prompt("Add multi menu items");
+			if(items != null){
+				$(buildMenu).append(items);
+			}
+		}
+		if(e.target.value == "select"){
 			var items = prompt("Add select menu items");
 			if(items != null){
-				//alert("Added: "+items);
-				$(buildQuestion).append(" Select Menu: "+items);
+				$(buildMenu).append(items);
 			}
 		}
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
@@ -93,6 +106,8 @@
 			},
 			success: function(data){
 				console.log(data);
+				$("#client_html").attr("href", data.url);
+				$("#client_zip").attr("href", data.zip);
 				$.mobile.changePage("#two");
 			}
 	  	});
@@ -115,7 +130,7 @@
 					 <label><input type="checkbox" name="checkbox-0">Create Database</input></label> \
 					';
 			$("#questionaire").append(newContent);
-			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div></div>');
+			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div></div>');
 					 //<input id="submit'+rq+'" type="submit" value="Add" class="submit">';
 		}
 	}
@@ -147,8 +162,9 @@
 	<div id="two" data-role="page">
 	<h3>Mobile Survey Client</h3>
 	<div data-role="fieldcontain">
-		<a href="#">Client Phonegap Package [zip]</a>
-		<a href="#">Client CSV Export [csv]</a>
+		<a id="client_html" href="#">Client Web Page [html]</a> - 
+		<a id="client_zip" href="">Client Phonegap Package [zip]</a> - 
+		<a id="client_csv" href="#">Client CSV Export [csv]</a>
 		<div id="surveyresult"></div>
 	</div>
   </body>

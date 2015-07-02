@@ -5,3 +5,40 @@
 #header { background-color: #E6ECEF; }
 .ui-grid-b { background-color: #9DB1C0; }
 #survey { background-color: #B6C4D0; }
+input[type=checkbox]{
+  position: absolute; 
+  overflow: hidden; 
+  clip: rect(0 0 0 0); 
+  height:1px; 
+  width:1px; 
+  margin:-1px; 
+  padding:0;
+  border:0;
+}
+ .libtn{
+	 border: 0;
+	 top: 15px;
+ }
+ .ui-btn {
+	 font-size: 25px;
+ }
+ .ui-mini{		
+	 font-size: 40px;		
+ }		
+ .ui-checkbox .ui-btn-text{		
+	 font-size: 40px;		
+ }
+ .ui-controlgroup-controls{
+	 text-align: center;
+	 width: 200% !important;
+ }
+ .ui-select {		
+	 font-size: 40px;		
+ }
+ body, input, select, textarea, button, .ui-btn {
+	 line-height: 1.1;
+	 font-size: 40px;
+ }
+ .ui-header {
+	 min-height: 100px;
+ }
