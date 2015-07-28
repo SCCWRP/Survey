@@ -245,6 +245,7 @@ var AnswerListView = Backbone.View.extend({
 				//app.getImage(function(imgUrl){ }, this.model, currentAnswer);
 				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 			} else {
+				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 				this.model.set({ picture_url: testUrl });
 				console.log("camera-library disabled not device");
 			}

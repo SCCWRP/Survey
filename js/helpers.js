@@ -33,35 +33,75 @@ app.helpers = {
 		}
 	},
   	getImage: function(callback,t,choice){
-	  alert("getImage");
-	  var imgUrl;
-	  function movePicture(picture){
-		alert("getImage-movePicture");
-		var currentDate = new Date();
-		var currentTime = currentDate.getTime();
-		var fileName = currentTime + ".jpg";
-		var baseUrl = "http://data.sccwrp.org/survey/files/";
-		var completeUrl = baseUrl + fileName;
-		// get existing url and add to it if necessary - image library choices
-		var existingUrl = t.get('picture_url');
-		// is it set already
-		var newUrl;
-		if(existingUrl){
-			newUrl = existingUrl + "," + completeUrl;
-		} else {
-			newUrl = completeUrl;
-		}
-		t.set({ picture_url: newUrl });
-		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
-			fileSystem = fs;
-			fileSystem.root.getDirectory('org.sccwrp.survey', {create: true},
-			function(dirEntry) {
-				alert("getImage-dirEntry");
-				picture.moveTo(dirEntry, fileName, app.helpers.onSuccessMove, app.helpers.onError);
-			}, app.onError);
-		}, app.onError);
-		callback(fileName);
-	  }
+		alert("getImage");
+	  	var imgUrl;
+	  	function movePicture(picture){
+			alert("getImage-movePicture");
+			var currentDate = new Date();
+			var currentTime = currentDate.getTime();
+			var fileName = currentTime + ".jpg";
+			var baseUrl = "http://data.sccwrp.org/survey/files/";
+			var completeUrl = baseUrl + fileName;
+			// get existing url and add to it if necessary - image library choices
+			var existingUrl = t.get('picture_url');
+			// is it set already
+			var newUrl;
+			if(existingUrl){
+				newUrl = existingUrl + "," + completeUrl;
+			} else {
+				newUrl = completeUrl;
+			}
+			t.set({ picture_url: newUrl });
+			window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
+				fileSystem = fs;
+				fileSystem.root.getDirectory('org.sccwrp.survey', {create: true},
+				function(dirEntry) {
+					alert("getImage-dirEntry");
+					picture.moveTo(dirEntry, fileName, onSuccessMove, app.helpers.onError);
+				}, app.helpers.onError);
+			}, app.helpers.onError);
+			callback(fileName);
+	    	}
+	    	function findPictureLocation(file){
+			window.resolveLocalFileSystemURI(file, movePicture, app.helpers.onError);
+	    	}
+	    	function onSuccessMove(f){
+			alert("onSuccessMove");
+			savedPicture = true;
+			function onConfirm(e){
+				alert("onConfirm");
+				if(e == "yes"){
+					app.helpers.getImage(function(imgUrl){ }, t, "Camera");
+				}
+				if(e == "no"){
+					$("#one").show();
+				}
+			}
+			if(choice == "Camera"){
+				custom_confirm("Would you like to add another picture?", "Additional Picture", "Yes", "No", onConfirm);
+	  		}
+	     	} 
+    	     	function onSuccess(imageURI){
+			var returnFile = findPictureLocation(imageURI);
+	  	}
+       	  	function onFail(message){
+			callback("failed: "+ message);
+	  	}
+	  	// ios bug
+ 	  	if(choice == "Camera"){
+			navigator.camera.getPicture(onSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.DATA_URI });
+	  	} else {
+			// use imagePicker plugin to select multiple images from users picture library
+			window.imagePicker.getPictures(
+			function(results){
+				for(var i = 0; i < results.length; i++){
+					onSuccess(results[i]);
+				}
+			}, function(error){
+				alert('Error: '+error);
+			});
+			$("#one").show();
+	  	}
 	},
 	onError: function(e){
 	alert("onError");
@@ -88,22 +128,6 @@ app.helpers = {
 	};
       	alert('Error: ' + msg);
   	},
-	onSuccessMove: function(f){
-		alert("onSuccessMove");
-		savedPicture = true;
-		function onConfirm(e){
-			alert("onConfirm");
-			if(e == "yes"){
-				app.helpers.getImage(function(imgUrl){ }, t, "Camera");
-			}
-			if(e == "no"){
-				$("#one").show();
-			}
-		}
-		if(choice == "Camera"){
-			custom_confirm("Would you like to add another picture?", "Additional Picture", "Yes", "No", onConfirm);
-		}
-        },
   	resizePage: function(){
 	/* in the beta version this functin was used with unique form element names
 	   in full study all (maybe) form elements derive from .ui-field-contain */
