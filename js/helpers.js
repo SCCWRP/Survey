@@ -32,6 +32,78 @@ app.helpers = {
 			alert(message);
 		}
 	},
+  	getImage: function(callback,t,choice){
+	  alert("getImage");
+	  var imgUrl;
+	  function movePicture(picture){
+		alert("getImage-movePicture");
+		var currentDate = new Date();
+		var currentTime = currentDate.getTime();
+		var fileName = currentTime + ".jpg";
+		var baseUrl = "http://data.sccwrp.org/survey/files/";
+		var completeUrl = baseUrl + fileName;
+		// get existing url and add to it if necessary - image library choices
+		var existingUrl = t.get('picture_url');
+		// is it set already
+		var newUrl;
+		if(existingUrl){
+			newUrl = existingUrl + "," + completeUrl;
+		} else {
+			newUrl = completeUrl;
+		}
+		t.set({ picture_url: newUrl });
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fs){
+			fileSystem = fs;
+			fileSystem.root.getDirectory('org.sccwrp.survey', {create: true},
+			function(dirEntry) {
+				alert("getImage-dirEntry");
+				picture.moveTo(dirEntry, fileName, app.helpers.onSuccessMove, app.helpers.onError);
+			}, app.onError);
+		}, app.onError);
+		callback(fileName);
+	  }
+	},
+	onError: function(e){
+	alert("onError");
+	var msg = '';
+    	switch (e.code) {
+          case FileError.QUOTA_EXCEEDED_ERR:
+		msg = 'QUOTA_EXCEEDED_ERR';
+          break;
+          case FileError.NOT_FOUND_ERR:
+		msg = 'NOT_FOUND_ERR';
+	  break;
+	  case FileError.SECURITY_ERR:
+	      msg = 'SECURITY_ERR';
+	  break;
+	  case FileError.INVALID_MODIFICATION_ERR:
+	      msg = 'INVALID_MODIFICATION_ERR';
+	  break;
+	  case FileError.INVALID_STATE_ERR:
+	      msg = 'INVALID_STATE_ERR';
+	  break;
+	  default:
+	      msg = 'Unknown Error';
+	  break;
+	};
+      	alert('Error: ' + msg);
+  	},
+	onSuccessMove: function(f){
+		alert("onSuccessMove");
+		savedPicture = true;
+		function onConfirm(e){
+			alert("onConfirm");
+			if(e == "yes"){
+				app.helpers.getImage(function(imgUrl){ }, t, "Camera");
+			}
+			if(e == "no"){
+				$("#one").show();
+			}
+		}
+		if(choice == "Camera"){
+			custom_confirm("Would you like to add another picture?", "Additional Picture", "Yes", "No", onConfirm);
+		}
+        },
   	resizePage: function(){
 	/* in the beta version this functin was used with unique form element names
 	   in full study all (maybe) form elements derive from .ui-field-contain */

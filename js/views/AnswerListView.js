@@ -225,21 +225,28 @@ var AnswerListView = Backbone.View.extend({
 		};
 	        //var currentAnswer = this.extractAnswer();
 		// current question
+		console.log("saveAnswer");
+		console.log(this.model.get("type"));
+		console.log(this.model.get("menu"));
 		var currentQuestion = Number(this.model.get("qcount")); 
 		appID = Number(this.model.get("id")); 
 		// next question  
 		var nextQuestion = (currentQuestion + 1);
 		var participant_type = this.model.get("q1");
 		//if(currentQuestion == 5 && currentAnswer == "Yes"){
-		if(currentQuestion == 5 && currentAnswer == "No"){
-			nextQuestion += 1;
-		}
-		if(currentQuestion == 6){
+		//if(currentQuestion == 5 && currentAnswer == "No"){
+			//nextQuestion += 1;
+		//}
+		if((this.model.get("type") == "radio") && (this.model.get("menu") == "Camera,Library")){
+			console.log("camera-library");
+			// somebody wants to take or choose a picture
 			var testUrl = "disabled";
 			if(isDevice){
-				app.getImage(function(imgUrl){ }, this.model, currentAnswer);
+				//app.getImage(function(imgUrl){ }, this.model, currentAnswer);
+				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 			} else {
 				this.model.set({ picture_url: testUrl });
+				console.log("camera-library disabled not device");
 			}
 		}
 		if(currentQuestion >=  this.endquestion){

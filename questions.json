@@ -17,7 +17,7 @@
 	"title": "Question Two?",
 	"action": "none",
       	"type": "radio",
-      	"menu": "Yes,No",
+      	"menu": "Camera,Library",
         "other": "n",
 	"otype": "",
   	"answer": "",
