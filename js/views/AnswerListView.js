@@ -106,6 +106,7 @@ var AnswerListView = Backbone.View.extend({
 			gotQuestion = questionList.get(nextQcount);
 			var fixMenu = gotQuestion.attributes.menu.split(",")
 			t.set({	'title': gotQuestion.attributes.title,
+				'action': gotQuestion.attributes.action,
 				'menu': fixMenu,
 				'type': gotQuestion.attributes.type,
 				'placeholder': gotQuestion.attributes.placeholder,
@@ -225,29 +226,42 @@ var AnswerListView = Backbone.View.extend({
 		};
 	        //var currentAnswer = this.extractAnswer();
 		// current question
-		console.log("saveAnswer");
-		console.log(this.model.get("type"));
-		console.log(this.model.get("menu"));
+		//console.log("saveAnswer");
+		//console.log(this.model.get("type"));
+		//console.log(this.model.get("menu"));
 		var currentQuestion = Number(this.model.get("qcount")); 
 		appID = Number(this.model.get("id")); 
 		// next question  
 		var nextQuestion = (currentQuestion + 1);
 		var participant_type = this.model.get("q1");
+		//split action on comma and put into an array
+		formaction = this.model.get("action").split(",");
+		// match answer to action
+		// answer|action
+		for(i=0; i < formaction.length; i++) {
+			answeraction = formaction[i].split("|");
+			//console.log("answer"+answeraction[0]);
+			//console.log("action"+answeraction[1]);
+			//console.log("currentAnswer: "+currentAnswer);
+                	if(currentAnswer == answeraction[0]){
+				// what action to take
+				//console.log("action to take"+answeraction[1]);
+				nextQuestion = answeraction[1];
+			}
+		}
 		//if(currentQuestion == 5 && currentAnswer == "Yes"){
 		//if(currentQuestion == 5 && currentAnswer == "No"){
 			//nextQuestion += 1;
 		//}
 		if((this.model.get("type") == "radio") && (this.model.get("menu") == "Camera,Library")){
-			console.log("camera-library");
+			//console.log("camera-library");
 			// somebody wants to take or choose a picture
 			var testUrl = "disabled";
 			if(isDevice){
 				//app.getImage(function(imgUrl){ }, this.model, currentAnswer);
 				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 			} else {
-				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 				this.model.set({ picture_url: testUrl });
-				console.log("camera-library disabled not device");
 			}
 		}
 		if(currentQuestion >=  this.endquestion){
@@ -303,7 +317,7 @@ var AnswerListView = Backbone.View.extend({
 		this.remove();
 	},
 	render: function(){
-		console.log("render");
+		//console.log("render");
 		$(this.el).html("");
 		//$(headerView.el).show();
 		//app.headerView.show();
