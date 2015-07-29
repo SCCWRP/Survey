@@ -57,6 +57,10 @@
 			var items = prompt("Add radio menu items");
 			if(items != null){
 				$(buildMenu).append(items);
+				var breakItems = items.split(",");
+				for(var i = 0; i < breakItems.length; i++){
+					$(".select-fmenu").append("<option value='"+breakItems[i]+"|"+i+"'>If user selects "+breakItems[i]+" go to "+i+"</option>");
+				}
 			}
 		}
 		if(e.target.value == "multi"){
@@ -82,6 +86,13 @@
 			}
 		}
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
+	});
+	$('#questionaire').on('change', ".select-fmenu", function(e) {
+		var formButton = this.id;
+		var lastChar = formButton.substr(formButton.length - 1);
+		var buildType = "#buildt"+lastChar;
+		var buildMenu = "#buildm"+lastChar;
+			$(buildMenu).append(e.target.value);
 	});
 	// add individual survey items by clicking add
 	/*
