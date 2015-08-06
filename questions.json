@@ -11,6 +11,8 @@
 	"declinedefault": "",
 	"errmessage": "",
       	"status": "incomplete",
+	"placeholder": "Enter station number",
+	"placetype": "text",
       	"id": "1"
   },
   {
@@ -56,7 +58,7 @@
       	"id": "4"
   },
   {
-	"title": "Question Five?",
+	"title": "Please provide Date/Time?",
 	"action": "none",
       	"type": "numberSelect",
       	"menu": "weight,height",
@@ -67,6 +69,8 @@
 	"declinedefault": "",
 	"errmessage": "",
       	"status": "incomplete",
+	"placeholder": "",
+	"placetype": "datetime-local",
       	"id": "5"
   }
 ]

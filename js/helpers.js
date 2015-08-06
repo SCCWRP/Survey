@@ -103,6 +103,19 @@ app.helpers = {
 			$("#one").show();
 	  	}
 	},
+  	getGPSOnSuccess: function(position){
+		latlon = position.coords.latitude + "," + position.coords.longitude
+  	},
+  	getGPSOnFailure: function(error){
+		latlon = "failed";
+  	},
+  	onDeviceReady: function(){
+		if(isDevice){
+			latlon = navigator.geolocation.getCurrentPosition(app.helpers.getGPSOnSuccess, app.helpers.getGPSOnFailure);
+			alert(latlon);
+		}
+		//window.requestFileSystem(window.TEMPORARY, 5*1024*1024 /*5MB*/, app.onFSSuccess, app.onError); // using chrome if mobile see below
+  	},
 	onError: function(e){
 	alert("onError");
 	var msg = '';

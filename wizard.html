@@ -22,7 +22,10 @@
 			 var buildQuestion = "#buildq"+i;
 			 var buildType = "#buildt"+i;
 			 var buildMenu = "#buildm"+i;
-			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"" };
+			 var buildAction = "#buildf"+i;
+			 var buildPlaceHolder = "#buildph"+i;
+			 var buildPlaceType = "#buildpt"+i;
+			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -30,7 +33,7 @@
 			 //data.object+i = object+i;
 		}
 			//console.log(data);
-			 test(data);
+			 submit(data);
 			 //Object {errors: "success -> writing to zip file ", result: "Table tbl_1435761014 created successfully", url: "http://data.sccwrp.org/survey/export/survey_1435761014/survey_1435761014.zip"}
 
 	});
@@ -51,7 +54,20 @@
 		var lastChar = formButton.substr(formButton.length - 1);
 		var buildType = "#buildt"+lastChar;
 		var buildMenu = "#buildm"+lastChar;
+		var buildPlaceHolder = "#buildph"+lastChar;
+		var buildPlaceType = "#buildpt"+lastChar;
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
+		if(e.target.value == "text"){
+			$(buildType).append(e.target.value);
+			var phitems = prompt("Add placeholder");
+			if(phitems != null){
+				$(buildPlaceHolder).append(phitems);
+			}
+			var ptitems = prompt("Add placetype (datetime-local)");
+			if(ptitems != null){
+				$(buildPlaceType).append(ptitems);
+			}
+		}
 		if(e.target.value == "radio"){
 			$(buildType).append(e.target.value);
 			var items = prompt("Add radio menu items");
@@ -59,7 +75,10 @@
 				$(buildMenu).append(items);
 				var breakItems = items.split(",");
 				for(var i = 0; i < breakItems.length; i++){
-					$(".select-fmenu").append("<option value='"+breakItems[i]+"|"+i+"'>If user selects "+breakItems[i]+" go to "+i+"</option>");
+					var actual_number = ( i + 1 );
+					//$(".select-fmenu").append("<option value='"+breakItems[i]+"|"+i+"'>If user selects "+breakItems[i]+"</option>");
+					$(".select-fmenu").append("<option value='"+breakItems[i]+"'>If user selects "+breakItems[i]+"</option>");
+					$(".select-fnmenu").append("<option value='"+actual_number+"'>go to question "+actual_number+"</option>");
 				}
 			}
 		}
@@ -87,12 +106,15 @@
 		}
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
 	});
-	$('#questionaire').on('change', ".select-fmenu", function(e) {
+	//$('#questionaire').on('change', ".select-fmenu", function(e) {
+	$('#questionaire').on('change', ".select-fnmenu", function(e) {
 		var formButton = this.id;
 		var lastChar = formButton.substr(formButton.length - 1);
-		var buildType = "#buildt"+lastChar;
-		var buildMenu = "#buildm"+lastChar;
-			$(buildMenu).append(e.target.value);
+		var currentAction = "#select-fmenu" + lastChar;
+		var currentActionNumber = e.target.value;
+		var currentActionCombine = $(currentAction).val() + "|" + currentActionNumber;
+		var buildAction = "#buildf"+lastChar;
+		$(buildAction).append(currentActionCombine);
 	});
 	// add individual survey items by clicking add
 	/*
@@ -106,7 +128,9 @@
 		$("#surveybuild").append(newQuestion);
 	});
 	*/
-	function test(data){
+	function submit(data){
+		console.log(data);
+		return;
 		//console.log(data);
 		/*
 		var data = {};
@@ -150,14 +174,16 @@
 					 	<option>multi</option> \
 					 </select> \
 					 <select id="select-fmenu'+rq+'" class="select-fmenu"> \
-					 	<option>Select One/Flow Control</option> \
+					 	<option>Flow Control</option> \
 					 	<option>Default</option> \
-					 	<option>If user selects "No" go to question 4</option> \
 					 </select> \
-					 <label><input type="checkbox" name="checkbox-0">Create Database</input></label> \
+					 <select id="select-fnmenu'+rq+'" class="select-fnmenu"> \
+					 	<option>Go To</option> \
+					 </select> \
+					 <br> \
 					';
 			$("#questionaire").append(newContent);
-			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div></div>');
+			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div><div id="buildf'+rq+'"></div><div id="buildph'+rq+'"></div><div id="buildpt'+rq+'"></div></div>');
 					 //<input id="submit'+rq+'" type="submit" value="Add" class="submit">';
 		}
 	}

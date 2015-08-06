@@ -18,7 +18,7 @@ app.Router = Backbone.Router.extend({
 			app.questionListView.render();
 
 	        	app.answerList = new AnswerList();
-		var answerCreate = app.answerList.create({qcount: 1, timestamp: SESSIONID}, {
+		var answerCreate = app.answerList.create({qcount: 1, device_type: deviceType, coordinates: latlon, timestamp: SESSIONID}, {
                 	success: function(response){
 				console.log(response);
 		        	var answer = app.answerList.get(response.id);
