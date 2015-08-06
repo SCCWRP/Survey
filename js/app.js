@@ -8,8 +8,12 @@ $.mobile.pushStateEnabled = false;
 networkStatus = navigator.onLine ? 'online' : 'offline';
 Backbone.history.start({pushState: true, hashChange: false});
 //FastClick.attach(document.body);
+if(document.URL.indexOf("http://") === -1 && document.URL.indexOf("https://") === -1){
+	isDevice = true;
+}
 if( isDevice ){
 	document.addEventListener("deviceready", function(){
+		alert("deviceready");
 		app.helpers.onDeviceReady();
 	},true);
 } else {

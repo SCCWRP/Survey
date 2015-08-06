@@ -111,6 +111,7 @@ app.helpers = {
   	},
   	onDeviceReady: function(){
 		if(isDevice){
+			alert("isDevice");
 			latlon = navigator.geolocation.getCurrentPosition(app.helpers.getGPSOnSuccess, app.helpers.getGPSOnFailure);
 			alert(latlon);
 		}
