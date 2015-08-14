@@ -22,10 +22,11 @@
 			 var buildQuestion = "#buildq"+i;
 			 var buildType = "#buildt"+i;
 			 var buildMenu = "#buildm"+i;
+			 var buildOther = "#buildo"+i;
 			 var buildAction = "#buildf"+i;
 			 var buildPlaceHolder = "#buildph"+i;
 			 var buildPlaceType = "#buildpt"+i;
-			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
+			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -54,6 +55,7 @@
 		var lastChar = formButton.substr(formButton.length - 1);
 		var buildType = "#buildt"+lastChar;
 		var buildMenu = "#buildm"+lastChar;
+		var buildOther = "#buildo"+lastChar;
 		var buildPlaceHolder = "#buildph"+lastChar;
 		var buildPlaceType = "#buildpt"+lastChar;
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
@@ -85,8 +87,20 @@
 		if(e.target.value == "multi"){
 			$(buildType).append(e.target.value);
 			var items = prompt("Add multi menu items");
+		        var item = items.split(",");	
+			//console.log("items:"+items);
 			if(items != null){
+				// for looping through each will need later
+				//$.each(item, function(key,value){
+					//console.log(key + ": "+ value);
+					//$(buildMenu).append(value);
+				//});
 				$(buildMenu).append(items);
+			}
+			if(items.indexOf("Other") > -1){
+				$(buildOther).append("y");
+			} else {
+				$(buildOther).append("n");
 			}
 		}
 		if(e.target.value == "photos"){
@@ -102,6 +116,11 @@
 			var items = prompt("Add select menu items");
 			if(items != null){
 				$(buildMenu).append(items);
+			}
+			if(items.indexOf("Other") > -1){
+				$(buildOther).append("y");
+			} else {
+				$(buildOther).append("n");
 			}
 		}
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
@@ -182,7 +201,7 @@
 					 <br> \
 					';
 			$("#questionaire").append(newContent);
-			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div><div id="buildf'+rq+'"></div><div id="buildph'+rq+'"></div><div id="buildpt'+rq+'"></div></div>');
+			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div><div id="buildo'+rq+'"></div><div id="buildf'+rq+'"></div><div id="buildph'+rq+'"></div><div id="buildpt'+rq+'"></div></div>');
 					 //<input id="submit'+rq+'" type="submit" value="Add" class="submit">';
 		}
 	}

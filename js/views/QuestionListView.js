@@ -6,6 +6,9 @@ app.QuestionListView = Backbone.View.extend({
 	render: function(){
 		$(this.el).html("");
 		var rawTitle = this.model.get("title");
-		$(this.el).html(this.template({"title": rawTitle}));	
+		if(isDevice){
+			$(this.el).html('<b id="survey_id">ID:'+timestampFile+'</b><br><b id="latlonid">Lat/Lon:'+latlon+'</b>');	
+		}
+		$(this.el).append(this.template({"title": rawTitle}));	
 	}
 });

@@ -112,7 +112,7 @@ app.helpers = {
   	onDeviceReady: function(){
 		if(isDevice){
 			alert("isDevice");
-			latlon = navigator.geolocation.getCurrentPosition(app.helpers.getGPSOnSuccess, app.helpers.getGPSOnFailure);
+			latlon = navigator.geolocation.getCurrentPosition(app.helpers.getGPSOnSuccess, app.helpers.getGPSOnFailure,{ enableHighAccuracy: true });
 			alert(latlon);
 		}
 		//window.requestFileSystem(window.TEMPORARY, 5*1024*1024 /*5MB*/, app.onFSSuccess, app.onError); // using chrome if mobile see below
