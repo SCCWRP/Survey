@@ -37,6 +37,7 @@ app.FooterView = Backbone.View.extend({
 	},
 	goToSync: function () {
 		alert("goToSync");
+		app.helpers.submitData();
 		//app.Routes.navigate("survey/sync", {trigger: true});
 	},
 	render: function(){

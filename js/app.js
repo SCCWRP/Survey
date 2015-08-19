@@ -13,8 +13,8 @@ if(document.URL.indexOf("http://") === -1 && document.URL.indexOf("https://") ==
 }
 if( isDevice ){
 	document.addEventListener("deviceready", function(){
-		alert("deviceready");
 		app.helpers.onDeviceReady();
+		window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, app.helpers.onFSSuccess, app.helpers.onError);
 	},true);
 } else {
 	app.helpers.onDeviceReady();

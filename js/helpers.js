@@ -17,6 +17,23 @@ app.helpers = {
 			$('#multi-select-time').css('margin-left','-3%');
 	    }
 	},
+  	dirty: function(){
+        	var dirtyKeys = window.localStorage.getItem("http://data.sccwrp.org/survey/index.php/surveys_dirty");
+        	if (dirtyKeys != null){
+			answerList = new AnswerList();
+			var servicesSync = answerList.fetch({ 
+        	  	  success: function (response) {
+				app.helpers.showContent(response);
+	        		answerList.syncDirtyAndDestroyed();    
+	          	  },
+	    	  	  error: function(model,response){
+				app.helpers.showContent(response.responseText);
+				app.helpers.showContent(response.status);
+				app.helpers.showContent(response.statusText);
+		  	  } 
+        		});
+		}
+  	},
   	dialog: function(message,title,button){
 		if(isDevice == true){
 			function alertDismiss(){
@@ -142,6 +159,18 @@ app.helpers = {
 	};
       	alert('Error: ' + msg);
   	},
+  	onFSSuccess: function(fs){
+		fileSystem = fs;
+		fileSystem.root.getDirectory('org.sccwrp.survey', {create: true},
+		function(dirEntry) {
+			directoryLocation = dirEntry;
+			timestampFile = ""+SESSIONID+".txt";
+			dirEntry.getFile(timestampFile, {create:true}, 
+				function(f) {
+		         		//app.showContent("directory and timestamp file created");
+				}, app.helpers.onError);
+		}, app.helpers.onError);
+  	},
   	resizePage: function(){
 	/* in the beta version this functin was used with unique form element names
 	   in full study all (maybe) form elements derive from .ui-field-contain */
@@ -179,5 +208,65 @@ app.helpers = {
 		var multiHeight = ($('#multi-view').height()+500+"px");
 		$('#one').css('height',multiHeight);
 	}
-  }
+  },
+  saveLocalData: function(m){
+  	function fileAppend(fs){
+    		fs.createWriter(function(fileWriter) {
+			fileWriter.onwrite = function(evt) {
+			    appRouter.navigate('/', {trigger: false});
+			    location.assign(HOME);
+		        };
+			//go to the end of the file...
+			fileWriter.seek(fileWriter.length);
+			var blob = new Blob([m], {type: "text/plain"});
+			fileWriter.write(blob);
+    		}, app.helpers.onError);
+        }
+	directoryLocation.getFile(timestampFile, {create:true}, fileAppend, app.helpers.onError);
+  },
+  showContent: function(s,t) {
+    if(t){	
+       	$("#content").append(s);
+    } else {
+    	$("#content").html(s);
+    }	
+  },
+  submitData: function(){
+        var dirtyKeys = window.localStorage.getItem("http://data.sccwrp.org/survey/index.php/surveys_dirty");
+        if (dirtyKeys != null){
+		answerList = new AnswerList();
+		var servicesSync = answerList.fetch({ 
+        	  success: function (response) {
+			app.helpers.showContent(response);
+	        	answerList.syncDirtyAndDestroyed();    
+	          },
+	    	  error: function(model,response){
+			app.helpers.showContent(response.responseText);
+			app.helpers.showContent(response.status);
+			app.helpers.showContent(response.statusText);
+		  }
+
+        	});
+	}
+	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(filesystem){
+		filesystem.root.getDirectory('org.sccwrp.survey', {}, function(dirEntry){
+			var dirReader = dirEntry.createReader();
+			dirReader.readEntries(function(entries){
+				var lastentry = false;
+				// problem one entry is a directory "save"
+				for(var i = 0; i < entries.length; i++){
+					var entry = entries[i];
+					if(entry.isFile){
+						alert("uploadFile here");
+						alert(filesystem);
+						alert(entry);
+						alert(lastentry);
+						//app.helpers.uploadFile(filesystem,entry,lastentry);
+					}
+				}
+			}, app.helpers.onError);
+		}, app.helpers.onError);
+	}, app.helpers.onError);
+  },
+
 };

@@ -52,40 +52,62 @@
 	});
 	$('#questionaire').on('change', ".select-qmenu", function(e) {
 		var formButton = this.id;
+		var questionCount = $('#select-qnumbers').val();
 		var lastChar = formButton.substr(formButton.length - 1);
 		var buildType = "#buildt"+lastChar;
 		var buildMenu = "#buildm"+lastChar;
 		var buildOther = "#buildo"+lastChar;
 		var buildPlaceHolder = "#buildph"+lastChar;
 		var buildPlaceType = "#buildpt"+lastChar;
+		var selectFmenu = "#select-fmenu" + lastChar;
+		var selectFNmenu = "#select-fnmenu" + lastChar;
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
+		// clear previous settings
+		if($(buildType) != null || $(buildMenu) != null || $(buildOther) != null || $(buildPlaceHolder) != null || $(buildPlaceType) != null){
+			$(buildType).text("");
+			$(buildMenu).text("");
+			$(buildOther).text("");
+			$(buildPlaceHolder).text("");
+			$(buildPlaceType).text("");
+			$(selectFmenu).empty().append('<option>Flow Control</option><option>Default</option>')
+			$(selectFNmenu).empty().append('<option>Go To</option>')
+		}
 		if(e.target.value == "text"){
-			$(buildType).append(e.target.value);
+			// clear placeholder
+			clearValue(buildType,e.target.value);
 			var phitems = prompt("Add placeholder");
 			if(phitems != null){
-				$(buildPlaceHolder).append(phitems);
+				clearValue(buildPlaceHolder,phitems);
 			}
-			var ptitems = prompt("Add placetype (datetime-local)");
+			var ptitems = prompt("Add placetype (number,datetime-local)");
 			if(ptitems != null){
-				$(buildPlaceType).append(ptitems);
+				clearValue(buildPlaceType,ptitems);
 			}
 		}
 		if(e.target.value == "radio"){
-			$(buildType).append(e.target.value);
+			clearValue(buildType,e.target.value);
 			var items = prompt("Add radio menu items");
 			if(items != null){
-				$(buildMenu).append(items);
+				//$(buildMenu).append(items);
+				clearValue(buildMenu,items);
 				var breakItems = items.split(",");
 				for(var i = 0; i < breakItems.length; i++){
-					var actual_number = ( i + 1 );
+					//var actual_number = ( i + 1 );
 					//$(".select-fmenu").append("<option value='"+breakItems[i]+"|"+i+"'>If user selects "+breakItems[i]+"</option>");
-					$(".select-fmenu").append("<option value='"+breakItems[i]+"'>If user selects "+breakItems[i]+"</option>");
-					$(".select-fnmenu").append("<option value='"+actual_number+"'>go to question "+actual_number+"</option>");
+					//$(".select-fmenu").append("<option value='"+breakItems[i]+"'>If user selects "+breakItems[i]+"</option>");
+					//var selectFmenu = "#select-fmenu" + lastChar;
+					$(selectFmenu).append("<option value='"+breakItems[i]+"'>If user selects "+breakItems[i]+"</option>");
+					//$(".select-fnmenu").append("<option value='"+actual_number+"'>go to question "+actual_number+"</option>");
+				}
+				for(var i = 0; i < questionCount; i++){
+					var actual_number = ( i + 1 );
+					//$(".select-fnmenu").append("<option value='"+actual_number+"'>go to question "+actual_number+"</option>");
+					$(selectFNmenu).append("<option value='"+actual_number+"'>go to question "+actual_number+"</option>");
 				}
 			}
 		}
 		if(e.target.value == "multi"){
-			$(buildType).append(e.target.value);
+			clearValue(buildType,e.target.value);
 			var items = prompt("Add multi menu items");
 		        var item = items.split(",");	
 			//console.log("items:"+items);
@@ -95,32 +117,42 @@
 					//console.log(key + ": "+ value);
 					//$(buildMenu).append(value);
 				//});
-				$(buildMenu).append(items);
+				//$(buildMenu).append(items);
+				clearValue(buildMenu,items);
 			}
 			if(items.indexOf("Other") > -1){
-				$(buildOther).append("y");
+				clearValue(buildOther,"y");
+				//$(buildOther).append("y");
 			} else {
-				$(buildOther).append("n");
+				clearValue(buildOther,"n");
+				//$(buildOther).append("n");
 			}
 		}
 		if(e.target.value == "photos"){
-			$(buildType).append("radio");
+			clearValue(buildType,"radio");
+			//$(buildType).append("radio");
 			//var items = prompt("Add multi menu items");
 			//if(items != null){
 				//$(buildMenu).append(items);
 			//}
-			$(buildMenu).append("Camera,Library");
+			clearValue(buildMenu,"Camera,Library");
+			clearHolderType(buildPlaceHolder,buildPlaceType);
+			//$(buildMenu).append("Camera,Library");
 		}
 		if(e.target.value == "select"){
-			$(buildType).append(e.target.value);
+			clearValue(buildType,e.target.value);
+			//$(buildType).append(e.target.value);
 			var items = prompt("Add select menu items");
 			if(items != null){
-				$(buildMenu).append(items);
+				clearValue(buildMenu,items);
+				//$(buildMenu).append(items);
 			}
 			if(items.indexOf("Other") > -1){
-				$(buildOther).append("y");
+				clearValue(buildOther,"y");
+				//$(buildOther).append("y");
 			} else {
-				$(buildOther).append("n");
+				clearValue(buildOther,"n");
+				//$(buildOther).append("n");
 			}
 		}
 		//$(buildQuestion).append(" Form Type: "+e.target.value);
@@ -147,6 +179,16 @@
 		$("#surveybuild").append(newQuestion);
 	});
 	*/
+	function clearHolderType(ph,pt){
+	       	$(ph).text("");
+	       	$(pt).text("");
+	}
+	function clearValue(sdiv,stext){
+		if($(sdiv).text()){
+	        	$(sdiv).text("");
+		}
+		$(sdiv).append(stext);
+	}
 	function submit(data){
 		console.log(data);
 		//console.log(data);
@@ -185,7 +227,6 @@
 					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
 					 	<option>Select One</option> \
 					 	<option>text</option> \
-					 	<option>number</option> \
 					 	<option>photos</option> \
 					 	<option>radio</option> \
 					 	<option>select</option> \
@@ -225,6 +266,16 @@
 			<option value="8">8</option>
 			<option value="9">9</option>
 			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+			<option value="14">14</option>
+			<option value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+			<option value="20">20</option>
 		</select>
 	</div>
 	<div id="questionaire"></div>
