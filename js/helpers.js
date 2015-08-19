@@ -258,15 +258,52 @@ app.helpers = {
 					var entry = entries[i];
 					if(entry.isFile){
 						alert("uploadFile here");
-						alert(filesystem);
-						alert(entry);
-						alert(lastentry);
-						//app.helpers.uploadFile(filesystem,entry,lastentry);
+						app.helpers.uploadFile(filesystem,entry,lastentry);
 					}
 				}
 			}, app.helpers.onError);
 		}, app.helpers.onError);
 	}, app.helpers.onError);
   },
+  uploadFile: function(fs,f,lf) {
+	var dirURL = "cdvfile://localhost/persistent/org.sccwrp.survey/";
+	var fileURL = f.fullPath;
+    	function win(r){
+		// get directory/create subdirectory/move file to save folder
+		fs.root.getDirectory('org.sccwrp.survey/save', {create: true},
+			function(dirEntry) {
+				f.moveTo(dirEntry, f.name, 
+					function onSuccessMove(){
+						app.helpers.showContent("Finished file: "+f.name+"&nbsp;&nbsp;<img src='img/green_check.png'><br>",true);
+					       	$("#header_log").html("Uploading Complete!");
+					}, app.helpers.onError);
+			}, app.helpers.onError);
+    	}
+    	function fail(error){
+		app.helpers.showContent("Failed file: "+f.name+" - "+error.code+"&nbsp;&nbsp;<img src='img/red_stop.png'><br>",true);
+		//app.showContent("An error has occurred: Code = " + error.code,true);
+	        //app.showContent("upload error source " + error.source,true);
+		//app.showContent("upload error target " + error.target,true);
+     	}
+    	var uri = encodeURI("http://data.sccwrp.org/survey/upload.php");
+    	var options = new FileUploadOptions();
+    	options.fileKey = "file";
+    	options.fileName = fileURL.substr(fileURL.lastIndexOf('/')+1);
+    	options.mimeType = "image/jpeg";
+	
+	//var headers={'headerParam':'headerValue','Connection':'Close'};
+    	//options.headers = headers;
+        options.headers = { Connection: "Close" };
+	options.chunkedMode = false;
 
+	var ft = new FileTransfer();
+	ft.onprogress = function(progressEvent){
+	  if (progressEvent.lengthComputable) {
+		var perc = Math.floor(progressEvent.loaded / progressEvent.total * 100);
+		$("#header_log").html("Uploading: "+f.name+" "+ perc +"%");
+	  } 
+	}
+	finalURL = dirURL + options.fileName;
+	ft.upload(finalURL, uri, win, fail, options);
+  }
 };
