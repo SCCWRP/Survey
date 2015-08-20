@@ -2,6 +2,7 @@
 var isDevice = false;
 var loginStatus = false;
 var networkStatus;
+var DIRTYURL;
 var HOME = location.href;
 var SESSIONID = +new Date;
 var deviceType = navigator.userAgent + "-survey-v1.0.0";

@@ -20,7 +20,8 @@ app.Router = Backbone.Router.extend({
 	        	app.answerList = new AnswerList();
 		var answerCreate = app.answerList.create({qcount: 1, device_type: deviceType, coordinates: latlon, timestamp: SESSIONID}, {
                 	success: function(response){
-				console.log(response);
+				//console.log(response);
+				DIRTYURL = app.answerList.url;
 		        	var answer = app.answerList.get(response.id);
 				app.answerListView = new AnswerListView({model: answer });
 				app.answerListView.endquestion = MAXQUESTION;
