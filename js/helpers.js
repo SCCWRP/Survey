@@ -282,6 +282,7 @@ app.helpers = {
 					function onSuccessMove(){
 						app.helpers.showContent("Finished file: "+f.name+"&nbsp;&nbsp;<img src='img/green_check.png'><br>",true);
 					       	$("#header_log").html("Uploading Complete!");
+						alert("onSuccessMove Finished");
 					}, app.helpers.onError);
 			}, app.helpers.onError);
     	}
