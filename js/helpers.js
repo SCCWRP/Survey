@@ -238,7 +238,6 @@ app.helpers = {
         //var dirtyKeys = window.localStorage.getItem("http://data.sccwrp.org/survey/index.php/surveys_dirty");
 	var dirtyKeys = window.localStorage.getItem(DIRTYURL);
         if (dirtyKeys != null){
-		alert(dirtyKeys);
 		answerList = new AnswerList();
 		var servicesSync = answerList.fetch({ 
         	  success: function (response) {
@@ -253,7 +252,6 @@ app.helpers = {
 
         	});
 	}
-	/*
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(filesystem){
 		filesystem.root.getDirectory('org.sccwrp.survey', {}, function(dirEntry){
 			var dirReader = dirEntry.createReader();
@@ -269,7 +267,6 @@ app.helpers = {
 			}, app.helpers.onError);
 		}, app.helpers.onError);
 	}, app.helpers.onError);
-	*/
   },
   uploadFile: function(fs,f,lf) {
 	var dirURL = "cdvfile://localhost/persistent/org.sccwrp.survey/";
