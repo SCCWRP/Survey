@@ -22,13 +22,14 @@
 		for(i = 1; i <= buildCount; i++){
 			 var record = {};
 			 var buildQuestion = "#buildq"+i;
+			 var buildName = "#buildn"+i;
 			 var buildType = "#buildt"+i;
 			 var buildMenu = "#buildm"+i;
 			 var buildOther = "#buildo"+i;
 			 var buildAction = "#buildf"+i;
 			 var buildPlaceHolder = "#buildph"+i;
 			 var buildPlaceType = "#buildpt"+i;
-			 data[i] = { "id": ""+i+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
+			 data[i] = { "id": ""+i+"", "name": ""+$(buildName)[0].innerHTML+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -41,21 +42,33 @@
 
 	});
 	$("#select-qnumbers").bind( "change", function(e) {
+		//alert("test");
 		build(e.target.value);
 		$("#select-qnumbers").selectmenu("disable");
-	});
+	})
 	$('#questionaire').on('keyup', '.qtext', function(e) {
 		var formButton = this.id;
-		var lastChar = formButton.substr(formButton.length - 1);
+		/* need to match all digits instead of just last character */
+		// old - var lastChar = formButton.substr(formButton.length - 1);
+		var lastChar = formButton.match(/\d+$/);
 		var formButton = this.id;
 		var enteredText = $(this).val();
 		var buildQuestion = "#buildq"+lastChar;
 		$(buildQuestion).html(enteredText);
 	});
+	$('#questionaire').on('keyup', '.qname', function(e) {
+		var formButton = this.id;
+		var lastChar = formButton.match(/\d+$/);
+		var formButton = this.id;
+		var enteredText = $(this).val();
+		var buildName = "#buildn"+lastChar;
+		$(buildName).html(enteredText);
+	});
 	$('#questionaire').on('change', ".select-qmenu", function(e) {
 		var formButton = this.id;
 		var questionCount = $('#select-qnumbers').val();
-		var lastChar = formButton.substr(formButton.length - 1);
+		//var lastChar = formButton.substr(formButton.length - 1);
+		var lastChar = formButton.match(/\d+$/);
 		var buildType = "#buildt"+lastChar;
 		var buildMenu = "#buildm"+lastChar;
 		var buildOther = "#buildo"+lastChar;
@@ -87,7 +100,7 @@
 					clearValue(buildPlaceType,ptitems);
 				}
 			}
-			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Input', headerClose: true, callbackClose: getText, blankContent : "<div id='customDiv'><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option></select></div><a rel='close' data-role='button' href='#'>Close</a>" });
+			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Input', headerClose: true, callbackClose: getText, blankContent : "<div id='customDiv'><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select></div><a rel='close' data-role='button' href='#'>Close</a>" });
 		}
 		if(e.target.value == "radio"){
 			clearValue(buildType,e.target.value);
@@ -124,6 +137,9 @@
 			}
 			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Multi-Select', headerClose: true, callbackClose: getMulti, blankContent : "<div id='customDiv'><input id='mi' type='text' placeholder='Comma Delimited Items [One,Two,Three]'></input><a rel='close' data-role='button' href='#'>Close</a>" });
 		}
+		if(e.target.value == "multitext"){
+			//$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Input', headerClose: true, callbackClose: getText, blankContent : "<div id='customDiv'><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select></div><a rel='close' data-role='button' href='#'>Close</a>" });
+		}
 		if(e.target.value == "photos"){
 			clearValue(buildType,"radio");
 			clearValue(buildMenu,"Camera,Library");
@@ -148,7 +164,8 @@
 	//$('#questionaire').on('change', ".select-fmenu", function(e) {
 	$('#questionaire').on('change', ".select-fnmenu", function(e) {
 		var formButton = this.id;
-		var lastChar = formButton.substr(formButton.length - 1);
+		//var lastChar = formButton.substr(formButton.length - 1);
+		var lastChar = formButton.match(/\d+$/);
 		var currentAction = "#select-fmenu" + lastChar;
 		var currentActionNumber = e.target.value;
 		var currentActionCombine = $(currentAction).val() + "|" + currentActionNumber;
@@ -201,6 +218,7 @@
 				console.log(data);
 				$("#client_html").attr("href", data.url);
 				$("#client_zip").attr("href", data.zip);
+				$("#client_csv").attr("href", data.csv);
 				$.mobile.changePage("#two");
 			}
 	  	});
@@ -210,14 +228,16 @@
 	function build(nq){
 		for(i = 0; i < nq; i++){
 			var rq = (i + 1);
-			var newContent = 'Question'+rq+': \
-					 <input id="qid'+rq+'" type="text" class="qtext"></input> \
+			var newContent = ''+rq+': \
+					 <input id="qid'+rq+'" placeholder="[Question]" type="text" class="qtext"></input> \
+					 <input id="qname'+rq+'" placeholder="[ColumnName]" type="text" class="qname"></input> \
 					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
 					 	<option>Choose One</option> \
 					 	<option value="text">Text</option> \
 					 	<option value="radio">Radio</option> \
 					 	<option value="select">Select</option> \
 					 	<option value="multi">Multi</option> \
+					 	<option value="multitext">Multi2</option> \
 					 	<option value="photos">Photos</option> \
 					 </select> \
 					 <select id="select-fmenu'+rq+'" class="select-fmenu"> \
@@ -230,7 +250,7 @@
 					 <br> \
 					';
 			$("#questionaire").append(newContent);
-			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div><div id="buildo'+rq+'"></div><div id="buildf'+rq+'"></div><div id="buildph'+rq+'"></div><div id="buildpt'+rq+'"></div></div>');
+			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildn'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div><div id="buildo'+rq+'"></div><div id="buildf'+rq+'"></div><div id="buildph'+rq+'"></div><div id="buildpt'+rq+'"></div></div>');
 		}
 	}
 	</script>
@@ -276,6 +296,8 @@
 		<a id="client_zip" href="">Client Phonegap Package [zip]</a> - 
 		<a id="client_csv" href="#">Client CSV Export [csv]</a>
 		<div id="surveyresult"></div>
+	</div>
+	<div id="template" data-role="page">
 	</div>
   </body>
 </html>
