@@ -157,10 +157,11 @@ var AnswerListView = Backbone.View.extend({
     	},
 	selectorString: {
 				"radio":"#aid input[type = 'radio']:checked",
+				"comment":"#aid",
 				"text":"#aid",
 				"select":"#aid",
 				"multi":"#aid input[type = 'checkbox']:checked",
-				"multitext":"#aid input[name=mid]",
+				"multitext":"#aid input[type = 'text']",
 				"sevenday":"#aid input[type = 'checkbox']:checked",
 				"numberSelect":"#aid",
 				"dateSelect":"[id=aid]",
@@ -170,7 +171,11 @@ var AnswerListView = Backbone.View.extend({
 		var currentAnswer = $(this.selectorString[formtype]); 
 		if(formtype == "multi" || formtype == "multitext" || formtype == "sevenday") {
 			var temparray = [];
-			currentAnswer.map(function () { temparray.push(this.value); });
+			if(formtype == "multitext"){
+				currentAnswer.map(function () { var combine = '"'+ this.name +'":"'+ this.value + '"'; temparray.push(combine); });
+			} else {
+				currentAnswer.map(function () { temparray.push(this.value); });
+			}
 			currentAnswer = temparray.join();
 		} else if(formtype == "numberSelect") {
 			currentAnswer = $("select").val() + " : " + currentAnswer.val();

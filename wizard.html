@@ -1,7 +1,7 @@
 <!DOCTYPE html>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge"/> 
     <head>
-        <title>Wizard</title>
+        <title>Environmental Survey Wizard</title>
        	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
 	<link rel="stylesheet" type="text/css" href="http://dev.jtsage.com/cdn/simpledialog/latest/jquery.mobile.simpledialog.min.css" />
 	<style type="text/css">
@@ -41,10 +41,50 @@
 			 //Object {errors: "success -> writing to zip file ", result: "Table tbl_1435761014 created successfully", url: "http://data.sccwrp.org/survey/export/survey_1435761014/survey_1435761014.zip"}
 
 	});
+	$('#one').on('keyup', '.app-title', function(e) {
+		var formButton = this.id;
+		var lastChar = formButton.match(/\d+$/);
+		var formButton = this.id;
+		var enteredText = $(this).val();
+		var buildTitle = "#buildat";
+		$(buildTitle).html(enteredText);
+	});
 	$("#select-qnumbers").bind( "change", function(e) {
-		//alert("test");
+		//$.mobile.changePage( "#template", { transition: "slideup"} );
 		build(e.target.value);
 		$("#select-qnumbers").selectmenu("disable");
+	})
+	$("#surveylist").on("click", ".qbuild", function(e) {
+			console.log(e.currentTarget.id);
+			var formButton = e.currentTarget.id;
+			var rq = formButton.substr(formButton.length - 1);
+			$.mobile.changePage( "#template", { transition: "slideup"} );
+			var newContent = ''+rq+': \
+			<input id="qid'+rq+'" placeholder="Input question or title" type="text" class="qtext" size="200"></input><br> \
+			<input id="qname'+rq+'" placeholder="Input name of field or column in database" type="text" class="qname" size="200"></input><br> \
+					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
+					 	<option>Choose a form element type</option> \
+					 	<option value="text">Text</option> \
+					 	<option value="radio">Radio</option> \
+					 	<option value="select">Select</option> \
+					 	<option value="multi">Multi Checkbox</option> \
+					 	<option value="multitext">Multi Text Input</option> \
+					 	<option value="photos">Photos</option> \
+					 	<option value="comment">Comments</option> \
+					 </select> \
+					 <select id="select-fmenu'+rq+'" class="select-fmenu"> \
+					 	<option>Flow Control</option> \
+					 	<option>Default</option> \
+					 </select> \
+					 <select id="select-fnmenu'+rq+'" class="select-fnmenu"> \
+					 	<option>Go To</option> \
+					 </select> \
+					 <br> \
+					';
+			$("#questionaire").html(newContent);
+	})
+	$("#surveylist").on("click", ".vbuild", function(e) {
+			console.log(e.currentTarget.id);
 	})
 	$('#questionaire').on('keyup', '.qtext', function(e) {
 		var formButton = this.id;
@@ -87,7 +127,7 @@
 			$(selectFmenu).empty().append('<option>Flow Control</option><option>Default</option>')
 			$(selectFNmenu).empty().append('<option>Go To</option>')
 		}
-		if(e.target.value == "text"){
+		if(e.target.value == "text" || e.target.value == "comment"){
 			// clear placeholder
 			clearValue(buildType,e.target.value);
 			function getText(){
@@ -121,7 +161,7 @@
 			//var items = prompt("Add radio menu items");
 			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Radio', headerClose: true, callbackClose: getRadio, blankContent : "<div id='customDiv'><input id='ri' type='text' placeholder='Comma Delimited Items [Yes,No,Maybe]'></input><a rel='close' data-role='button' href='#'>Close</a>" });
 		}
-		if(e.target.value == "multi"){
+		if(e.target.value == "multi" || e.target.value == "multitext"){
 			clearValue(buildType,e.target.value);
 			function getMulti(){
 				var items = $('#mi').val();
@@ -137,9 +177,9 @@
 			}
 			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Multi-Select', headerClose: true, callbackClose: getMulti, blankContent : "<div id='customDiv'><input id='mi' type='text' placeholder='Comma Delimited Items [One,Two,Three]'></input><a rel='close' data-role='button' href='#'>Close</a>" });
 		}
-		if(e.target.value == "multitext"){
+		//if(e.target.value == "multitext"){
 			//$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Input', headerClose: true, callbackClose: getText, blankContent : "<div id='customDiv'><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select></div><a rel='close' data-role='button' href='#'>Close</a>" });
-		}
+		//}
 		if(e.target.value == "photos"){
 			clearValue(buildType,"radio");
 			clearValue(buildMenu,"Camera,Library");
@@ -228,37 +268,20 @@
 	function build(nq){
 		for(i = 0; i < nq; i++){
 			var rq = (i + 1);
-			var newContent = ''+rq+': \
-					 <input id="qid'+rq+'" placeholder="[Question]" type="text" class="qtext"></input> \
-					 <input id="qname'+rq+'" placeholder="[ColumnName]" type="text" class="qname"></input> \
-					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
-					 	<option>Choose One</option> \
-					 	<option value="text">Text</option> \
-					 	<option value="radio">Radio</option> \
-					 	<option value="select">Select</option> \
-					 	<option value="multi">Multi</option> \
-					 	<option value="multitext">Multi2</option> \
-					 	<option value="photos">Photos</option> \
-					 </select> \
-					 <select id="select-fmenu'+rq+'" class="select-fmenu"> \
-					 	<option>Flow Control</option> \
-					 	<option>Default</option> \
-					 </select> \
-					 <select id="select-fnmenu'+rq+'" class="select-fnmenu"> \
-					 	<option>Go To</option> \
-					 </select> \
-					 <br> \
-					';
-			$("#questionaire").append(newContent);
+			var newContent = 'Question '+rq+' :  <a href="#" data-role="button" id="question'+rq+'" class="qbuild">Edit</a> - <a href="#" data-role="button" id="question'+rq+'" class="vbuild">View</a><br> \
+			';
+			//$("#questionaire").append(newContent);
+			$("#surveylist").append(newContent);
 			$("#surveybuild").append('<div id="build'+rq+'" class="build_container">Screen'+rq+'<div id="buildq'+rq+'"></div><div id="buildn'+rq+'"></div><div id="buildt'+rq+'"></div><div id="buildm'+rq+'"></div><div id="buildo'+rq+'"></div><div id="buildf'+rq+'"></div><div id="buildph'+rq+'"></div><div id="buildpt'+rq+'"></div></div>');
 		}
 	}
 	</script>
   </head>
   <body>
-	<div id="one" data-role="page">
-	<h3>Mobile Survey Wizard</h3>
-	<h2>Disabled build.php and index.php</h2>
+	<div data-role="page" id="one">
+	<h3>Environmental Mobile Survey Wizard</h3>
+	<input 
+	<input id='app-title' type='text' placeholder='Insert the title of your application here' class='app-title'></input>
 	<div data-role="fieldcontain">
 		<label for="select-qnumbers" class="select">How many questions does your survey contain?</label>
 		<select name="select-qnumbers" id="select-qnumbers">
@@ -285,19 +308,30 @@
 			<option value="20">20</option>
 		</select>
 	</div>
-	<div id="questionaire"></div>
-	<div id="surveybuild"></div>
+	<div id="surveylist"></div>
+	<div id="surveybuild"><p id="buildat">Fake Title</p></div>
 	<button id="finish" class="finish">Finished</button>
-	</div>
-	<div id="two" data-role="page">
-	<h3>Mobile Survey Client</h3>
-	<div data-role="fieldcontain">
+</div> <!-- end page one // -->
+	<div data-role="page" id="two">
+	  <h3>Mobile Survey Client</h3>
+	  <div data-role="fieldcontain">
 		<a id="client_html" href="#">Client Web Page [html]</a> - 
 		<a id="client_zip" href="">Client Phonegap Package [zip]</a> - 
 		<a id="client_csv" href="#">Client CSV Export [csv]</a>
 		<div id="surveyresult"></div>
+	  </div>
 	</div>
-	<div id="template" data-role="page">
+	<div data-role="dialog" id="template" data-url="template" tabindex="0" class="ui-page ui-body-c ui-dialog ui-overlay-a">
+			<div data-role="header" data-theme="e" class="ui-corner-top ui-header ui-bar-e" role="banner">
+				<h1 class="ui-title" role="heading" aria-level="1">Dialog</h1>
+			</div><!-- /header -->
+			<div data-role="content" data-theme="d" class="ui-content ui-body-d" role="main">	
+				<div id="questionaire"></div>
+				<p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="d" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-icon-left"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Back to page "one"</span><span class="ui-icon ui-icon-back ui-icon-shadow">&nbsp;</span></span></a></p>
+			</div><!-- /content -->
+			<div data-role="footer" class="ui-corner-bottom ui-footer ui-bar-a" role="contentinfo">
+				<h4 class="ui-title" role="heading" aria-level="1">Page Footer</h4>
+			</div><!-- /footer -->
 	</div>
   </body>
 </html>

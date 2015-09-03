@@ -2,7 +2,7 @@
   {
 	"title": "Question One?",
 	"action": "Default",
-      	"type": "text",
+      	"type": "comment",
       	"menu": "",
         "other": "n",
 	"otype": "",
@@ -11,7 +11,7 @@
 	"declinedefault": "",
 	"errmessage": "",
       	"status": "incomplete",
-	"placeholder": "Enter station number",
+	"placeholder": "Comments",
 	"placetype": "text",
       	"id": "1"
   },
