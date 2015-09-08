@@ -21,6 +21,8 @@
 		var data = {};
 		for(i = 1; i <= buildCount; i++){
 			 var record = {};
+			 var buildAppTitle = "#buildat";
+			 var buildAppOrg = "#buildao";
 			 var buildQuestion = "#buildq"+i;
 			 var buildName = "#buildn"+i;
 			 var buildType = "#buildt"+i;
@@ -29,7 +31,7 @@
 			 var buildAction = "#buildf"+i;
 			 var buildPlaceHolder = "#buildph"+i;
 			 var buildPlaceType = "#buildpt"+i;
-			 data[i] = { "id": ""+i+"", "name": ""+$(buildName)[0].innerHTML+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
+			 data[i] = { "apptitle": ""+$(buildAppTitle)[0].innerHTML+"","apporg": ""+$(buildAppOrg)[0].innerHTML+"", "id": ""+i+"", "name": ""+$(buildName)[0].innerHTML+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -49,18 +51,22 @@
 		var buildTitle = "#buildat";
 		$(buildTitle).html(enteredText);
 	});
+	$('#one').on('change', ".app-org", function(e) {
+		var buildAppOrg = "#buildao";
+		$(buildAppOrg).html(e.target.value);
+	});
 	$("#select-qnumbers").bind( "change", function(e) {
 		//$.mobile.changePage( "#template", { transition: "slideup"} );
 		build(e.target.value);
 		$("#select-qnumbers").selectmenu("disable");
 	})
 	$("#surveylist").on("click", ".qbuild", function(e) {
-			console.log(e.currentTarget.id);
+			$(this).html("Edit");	
 			var formButton = e.currentTarget.id;
 			var rq = formButton.substr(formButton.length - 1);
 			$.mobile.changePage( "#template", { transition: "slideup"} );
-			var newContent = ''+rq+': \
-			<input id="qid'+rq+'" placeholder="Input question or title" type="text" class="qtext" size="200"></input><br> \
+			//var newContent = ''+rq+': \
+			var newContent = '<input id="qid'+rq+'" placeholder="Input question or title" type="text" class="qtext" size="200"></input><br> \
 			<input id="qname'+rq+'" placeholder="Input name of field or column in database" type="text" class="qname" size="200"></input><br> \
 					 <select id="select-qmenu'+rq+'" class="select-qmenu"> \
 					 	<option>Choose a form element type</option> \
@@ -81,17 +87,26 @@
 					 </select> \
 					 <br> \
 					';
+			$("#questionaire_title").html("Question "+rq);
 			$("#questionaire").html(newContent);
 	})
 	$("#surveylist").on("click", ".vbuild", function(e) {
-			console.log(e.currentTarget.id);
+		var formButton = e.currentTarget.id;
+		var lastChar = formButton.match(/\d+$/);
+		//var getDiv = "#build"+lastChar[0];
+		var getTitle = "#buildq"+lastChar[0];
+		var viewTitle = $(getTitle).text();
+		//var viewDiv = $(getDiv).text();
+		//var view = $("#build1").text();
+		//$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Select', headerClose: true, blankContent : "my test" });
+		$('<div>').simpledialog2({ mode: 'blank', headerText: 'Some Stuff', headerClose: true, blankContent : "<div><h3>"+viewTitle+"</h3></div>" })
 	})
 	$('#questionaire').on('keyup', '.qtext', function(e) {
 		var formButton = this.id;
 		/* need to match all digits instead of just last character */
 		// old - var lastChar = formButton.substr(formButton.length - 1);
 		var lastChar = formButton.match(/\d+$/);
-		var formButton = this.id;
+		//var formButton = this.id;
 		var enteredText = $(this).val();
 		var buildQuestion = "#buildq"+lastChar;
 		$(buildQuestion).html(enteredText);
@@ -268,7 +283,7 @@
 	function build(nq){
 		for(i = 0; i < nq; i++){
 			var rq = (i + 1);
-			var newContent = 'Question '+rq+' :  <a href="#" data-role="button" id="question'+rq+'" class="qbuild">Edit</a> - <a href="#" data-role="button" id="question'+rq+'" class="vbuild">View</a><br> \
+			var newContent = 'Question '+rq+' :  <a href="#" data-role="button" id="question'+rq+'" class="qbuild">Build</a> - <a href="#" data-role="button" id="question'+rq+'" class="vbuild">View</a><br> \
 			';
 			//$("#questionaire").append(newContent);
 			$("#surveylist").append(newContent);
@@ -280,8 +295,8 @@
   <body>
 	<div data-role="page" id="one">
 	<h3>Environmental Mobile Survey Wizard</h3>
-	<input 
 	<input id='app-title' type='text' placeholder='Insert the title of your application here' class='app-title'></input>
+	<select name="app-org" id="app-org" class="app-org"><option>Select Organization</option><option value="SCCWRP">SCCWRP</option></select>
 	<div data-role="fieldcontain">
 		<label for="select-qnumbers" class="select">How many questions does your survey contain?</label>
 		<select name="select-qnumbers" id="select-qnumbers">
@@ -309,7 +324,7 @@
 		</select>
 	</div>
 	<div id="surveylist"></div>
-	<div id="surveybuild"><p id="buildat">Fake Title</p></div>
+	<div id="surveybuild"><b id="buildat">Fake Title</b> - <b id="buildao">Fake Organization</b></div>
 	<button id="finish" class="finish">Finished</button>
 </div> <!-- end page one // -->
 	<div data-role="page" id="two">
@@ -323,15 +338,12 @@
 	</div>
 	<div data-role="dialog" id="template" data-url="template" tabindex="0" class="ui-page ui-body-c ui-dialog ui-overlay-a">
 			<div data-role="header" data-theme="e" class="ui-corner-top ui-header ui-bar-e" role="banner">
-				<h1 class="ui-title" role="heading" aria-level="1">Dialog</h1>
+				<h1 id="questionaire_title" class="ui-title" role="heading" aria-level="1">Dialog</h1>
 			</div><!-- /header -->
 			<div data-role="content" data-theme="d" class="ui-content ui-body-d" role="main">	
 				<div id="questionaire"></div>
-				<p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="d" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-icon-left"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Back to page "one"</span><span class="ui-icon ui-icon-back ui-icon-shadow">&nbsp;</span></span></a></p>
+				<p><a href="#one" data-rel="back" data-role="button" data-inline="true" data-icon="back" data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-theme="d" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-inline ui-btn-icon-left"><span class="ui-btn-inner ui-btn-corner-all"><span class="ui-btn-text">Save</span><span class="ui-icon ui-icon-back ui-icon-shadow">&nbsp;</span></span></a></p>
 			</div><!-- /content -->
-			<div data-role="footer" class="ui-corner-bottom ui-footer ui-bar-a" role="contentinfo">
-				<h4 class="ui-title" role="heading" aria-level="1">Page Footer</h4>
-			</div><!-- /footer -->
 	</div>
   </body>
 </html>
