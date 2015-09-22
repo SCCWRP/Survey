@@ -2,7 +2,7 @@
   {
 	"title": "Question One?",
 	"action": "Default",
-      	"type": "comment",
+      	"type": "text",
       	"menu": "",
         "other": "n",
 	"otype": "",
@@ -17,7 +17,7 @@
   },
   {
 	"title": "Question Two?",
-	"action": "Camera|3,Library|4",
+	"action": "",
       	"type": "radio",
       	"menu": "Camera,Library",
         "other": "n",
@@ -31,7 +31,7 @@
   },
   {
 	"title": "Question Three?",
-	"action": "One|4,Two|4,Three|5",
+	"action": "One|4,Two|4,Three|7",
       	"type": "select",
       	"menu": "Select One,One,Two,Three,Other",
         "other": "y",

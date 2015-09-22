@@ -86,10 +86,10 @@ app.helpers = {
 			window.resolveLocalFileSystemURI(file, movePicture, app.helpers.onError);
 	    	}
 	    	function onSuccessMove(f){
-			alert("onSuccessMove");
+			//alert("onSuccessMove");
+			//app.helpers.dialog("Saved Picture","Notification","Ok");
 			savedPicture = true;
 			function onConfirm(e){
-				alert("onConfirm");
 				if(e == "yes"){
 					app.helpers.getImage(function(imgUrl){ }, t, "Camera");
 				}
@@ -216,7 +216,8 @@ app.helpers = {
   	function fileAppend(fs){
     		fs.createWriter(function(fileWriter) {
 			fileWriter.onwrite = function(evt) {
-			    appRouter.navigate('/', {trigger: false});
+			    app.helpers.dialog("Survey is Complete","Notification","Ok");
+			    Backbone.history.navigate('survey/start', {trigger: false});
 			    location.assign(HOME);
 		        };
 			//go to the end of the file...
