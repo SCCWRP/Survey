@@ -18,7 +18,7 @@ app.Router = Backbone.Router.extend({
 			app.questionListView.render();
 
 	        	app.answerList = new AnswerList();
-		var answerCreate = app.answerList.create({qcount: 1, device_type: deviceType, coordinates: latlon, timestamp: SESSIONID}, {
+		var answerCreate = app.answerList.create({qcount: 1, device_type: deviceType, timestamp: SESSIONID}, {
                 	success: function(response){
 				//console.log(response);
 				DIRTYURL = app.answerList.url;
