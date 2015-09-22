@@ -266,7 +266,6 @@ var AnswerListView = Backbone.View.extend({
 				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 			} else {
 				this.model.set({ picture_url: "disabled" });
-				console.log("camera-library");
 			}
 		}
 		if(currentQuestion >=  this.endquestion){
@@ -284,7 +283,6 @@ var AnswerListView = Backbone.View.extend({
 		this.model.set("q"+currentQuestion, currentAnswer);
 		// set coordinates - gps can take awhile
 		this.model.set({coordinates: latlon});
-		console.log(this.model);
 		answerDetails.qcount = nextQuestion;
 		// either set or save here
 		//this.model.set(answerDetails, {validate:true});
