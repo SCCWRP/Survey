@@ -259,14 +259,14 @@ var AnswerListView = Backbone.View.extend({
 			//nextQuestion += 1;
 		//}
 		if((this.model.get("type") == "radio") && (this.model.get("menu") == "Camera,Library")){
-			console.log("camera-library");
 			// somebody wants to take or choose a picture
-			var testUrl = "disabled";
+			//var testUrl = "disabled";
 			if(isDevice){
 				//app.getImage(function(imgUrl){ }, this.model, currentAnswer);
 				app.helpers.getImage(function(imgUrl){ }, this.model, currentAnswer);
 			} else {
-				this.model.set({ picture_url: testUrl });
+				this.model.set({ picture_url: "disabled" });
+				console.log("camera-library");
 			}
 		}
 		if(currentQuestion >=  this.endquestion){
