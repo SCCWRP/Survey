@@ -283,8 +283,8 @@ var AnswerListView = Backbone.View.extend({
 		answerDetails["q"+currentQuestion] = currentAnswer;
 		this.model.set("q"+currentQuestion, currentAnswer);
 		// set coordinates - gps can take awhile
-		alert(latlon);
 		this.model.set({coordinates: latlon});
+		console.log(this.model);
 		answerDetails.qcount = nextQuestion;
 		// either set or save here
 		//this.model.set(answerDetails, {validate:true});
