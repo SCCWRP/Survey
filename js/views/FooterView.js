@@ -24,7 +24,16 @@ app.FooterView = Backbone.View.extend({
 		this.trigger("forward");
 	},
 	restart: function () {
-		alert("restart");
+		function onConfirm(e){
+			if(e == "yes"){
+	        		Backbone.history.navigate('survey/start', {trigger: false});
+	        		location.assign(HOME);
+			}
+			if(e == "no"){
+				return;
+			}
+		}
+		custom_confirm("Do you want to quit and restart?", "Restart", "Yes", "No", onConfirm);
 	},
 	goToEdit: function () {
 		//alert("goToEdit");
@@ -32,8 +41,16 @@ app.FooterView = Backbone.View.extend({
 		//app.Routes.navigate("survey/edit", {trigger: true});
 	},
 	goToSurvey: function () {
-		alert("goToSurvey");
-		//app.Routes.navigate("survey/survey", {trigger: true});
+		function onConfirm(e){
+			if(e == "yes"){
+	        		Backbone.history.navigate('survey/start', {trigger: false});
+	        		location.assign(HOME);
+			}
+			if(e == "no"){
+				return;
+			}
+		}
+		custom_confirm("Do you want to quit and restart?", "Restart", "Yes", "No", onConfirm);
 	},
 	goToSync: function () {
 		alert("goToSync");
