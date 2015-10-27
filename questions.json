@@ -12,7 +12,7 @@
 	"errmessage": "",
       	"status": "incomplete",
 	"placeholder": "Comments",
-	"placetype": "text",
+	"placetype": "datetime-local",
       	"id": "1"
   },
   {

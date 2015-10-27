@@ -80,8 +80,8 @@ var AnswerListView = Backbone.View.extend({
 	},
 	nextQuestion:function(t, response, options){	
 		//console.log("nextQuestion");
-		//console.log(this.model);
-		//console.log(this.model.attributes);
+		console.log(this.model);
+		console.log(this.model.attributes);
 		var val = this.model.validate(this.model.attributes);
 		if(val){
 			footerView.toggle("on");

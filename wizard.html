@@ -20,6 +20,7 @@
 		//data.object1 = object1;
 		var data = {};
 		for(i = 1; i <= buildCount; i++){
+			 var setAction;
 			 var record = {};
 			 var buildAppTitle = "#buildat";
 			 var buildAppOrg = "#buildao";
@@ -29,9 +30,15 @@
 			 var buildMenu = "#buildm"+i;
 			 var buildOther = "#buildo"+i;
 			 var buildAction = "#buildf"+i;
+			 if($(buildAction)[0].innerHTML){
+			 	setAction = $(buildAction)[0].innerHTML;
+			 } else {
+			 	setAction = "none";
+			 }
 			 var buildPlaceHolder = "#buildph"+i;
 			 var buildPlaceType = "#buildpt"+i;
-			 data[i] = { "apptitle": ""+$(buildAppTitle)[0].innerHTML+"","apporg": ""+$(buildAppOrg)[0].innerHTML+"", "id": ""+i+"", "name": ""+$(buildName)[0].innerHTML+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
+			 //data[i] = { "apptitle": ""+$(buildAppTitle)[0].innerHTML+"","apporg": ""+$(buildAppOrg)[0].innerHTML+"", "id": ""+i+"", "name": ""+$(buildName)[0].innerHTML+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+$(buildAction)[0].innerHTML+"" };
+			 data[i] = { "apptitle": ""+$(buildAppTitle)[0].innerHTML+"","apporg": ""+$(buildAppOrg)[0].innerHTML+"", "id": ""+i+"", "name": ""+$(buildName)[0].innerHTML+"", "title": ""+$(buildQuestion)[0].innerHTML+"", "type" : ""+$(buildType)[0].innerHTML+"", "menu": ""+$(buildMenu)[0].innerHTML+"", "other": ""+$(buildOther)[0].innerHTML+"", "placeholder": ""+$(buildPlaceHolder)[0].innerHTML+"", "placetype": ""+$(buildPlaceType)[0].innerHTML+"", "action": ""+setAction+"" };
 			 //data.record[i] = record[i];
 			 //console.log($(buildQuestion)[0].innerHTML);
 			 //console.log($(buildType)[0].innerHTML);
@@ -158,7 +165,7 @@
 					clearValue(buildPlaceType,ptitems);
 				}
 			}
-			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Input', headerClose: true, callbackClose: getText, blankContent : "<div id='customDiv'><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='date-time'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select></div><a rel='close' data-role='button' href='#'>Close</a>" });
+			$('<div>').simpledialog2({ mode: 'blank', headerText: 'Customize Input', headerClose: true, callbackClose: getText, blankContent : "<div id='customDiv'><input id='ph' type='text' placeholder='Input Placeholder [First Name]'></input><select id='pt'><option>Input Type</option><option value='text'>Text</option><option value='number'>Number</option><option value='datetime-local'>Date-Time</option><option value='tel'>Telephone</option><option value='email'>Email</option></select></div><a rel='close' data-role='button' href='#'>Close</a>" });
 		      var showElement = "#view"+lastChar;
 		      $(showElement).text("Form Element Type: "+e.target.value);
 		}
@@ -341,10 +348,15 @@
 			<option value="23">23</option>
 			<option value="24">24</option>
 			<option value="25">25</option>
+			<option value="26">26</option>
+			<option value="27">27</option>
+			<option value="28">28</option>
+			<option value="29">29</option>
+			<option value="30">30</option>
 		</select>
 	</div>
 	<div id="surveylist"></div>
-	<div id="surveybuild"><b id="buildat">Fake Title</b> - <b id="buildao">Fake Organization</b></div>
+	<div id="surveybuild"><b id="buildat">Temporary Title</b> - <b id="buildao">Temporary Organization</b></div>
 	<button id="finish" class="finish">Finished</button>
 </div> <!-- end page one // -->
 	<div data-role="page" id="two">
